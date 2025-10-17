@@ -1,8 +1,23 @@
-import React from "react";
+import { dateDisplay } from "utils/date";
 
-const Table = ({ columns, datas }) => {
+const TaskLogs = ({ datas }) => {
+  const columns = [
+    {
+      header: "Status",
+      key: "status",
+    },
+    {
+      header: "Date",
+      key: "timestamp",
+    },
+  ];
+
+  const Td = ({ children }) => {
+    return <td className="px-3 py-2 whitespace-nowrap">{children}</td>;
+  };
+
   return (
-    <div className="w-full overflow-x-auto rounded-sm border border-gray-200 shadow-sm bg-white">
+    <div className="w-full overflow-x-auto rounded-sm border border-gray-200  bg-white">
       <table className="min-w-full text-sm text-left text-gray-700">
         {/* Table Header */}
         <thead className="bg-gray-100 text-gray-900 font-medium">
@@ -32,13 +47,8 @@ const Table = ({ columns, datas }) => {
                 key={data.id || idx}
                 className={"border-t hover:bg-gray-50 transition"}
               >
-                {columns.map((col) => (
-                  <td key={col.key} className="px-3 py-2 whitespace-nowrap">
-                    {typeof col.render === "function"
-                      ? col.render(data[col.key], data)
-                      : data[col.key] ?? "-"}
-                  </td>
-                ))}
+                <Td>{data.status}</Td>
+                <Td>{dateDisplay(data.timestamp)}</Td>
               </tr>
             ))
           )}
@@ -48,4 +58,4 @@ const Table = ({ columns, datas }) => {
   );
 };
 
-export default Table;
+export default TaskLogs;

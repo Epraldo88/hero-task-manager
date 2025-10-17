@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
 export const useModalStore = create((set) => ({
-  action: "", // CREATE | EDIT
+  action: "", // CREATE | VIEW | ALERT
   setAction: (value) => set({ action: value }),
 }));

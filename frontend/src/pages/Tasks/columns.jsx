@@ -1,5 +1,7 @@
-import StatusTag from "components/StatusTag";
+import PerformanceTag from "components/PerformanceTag";
 import dayjs from "dayjs";
+import RowAction from "./components/RowAction";
+import CellStatus from "./components/Status/CellStatus";
 
 export const taskColumns = [
   {
@@ -17,7 +19,7 @@ export const taskColumns = [
   {
     header: "Status",
     key: "status",
-    render: (value) => <StatusTag status={value} />,
+    render: (_, data) => <CellStatus data={data} />,
   },
   {
     header: "Due Date",
@@ -27,6 +29,11 @@ export const taskColumns = [
   {
     header: "Performance",
     key: "performance_status",
-    render: (value) => <StatusTag status={value} />,
+    render: (value) => <PerformanceTag status={value} />,
+  },
+  {
+    header: "Action",
+    key: "action",
+    render: (_, data) => <RowAction data={data} />,
   },
 ];

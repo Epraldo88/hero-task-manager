@@ -54,7 +54,7 @@ export const updateTask = async (req, res) => {
     const { title, description, assignee, status, deadline_date } = req.body;
     const oldData = await pool.query(
       `
-        SELECT * FROM tasks WHERE id = $1,
+        SELECT * FROM tasks WHERE id = $1
       `,
       [id]
     );

@@ -17,18 +17,27 @@ export const createTask = async (data) => {
   return await res.json();
 };
 
-export const updateTask = async (id, data) => {
+export const updateTask = async ({ id, data }) => {
   const res = await fetch(`${BASE_URL}/${id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
   if (!res.ok) throw new Error("Failed to update task");
-  return res.json();
+  const result = await res.json();
+  return result.data;
 };
 
 export const deleteTask = async (id) => {
   const res = await fetch(`${BASE_URL}/${id}`, { method: "DELETE" });
   if (!res.ok) throw new Error("Failed to delete task");
-  return res.json();
+  const result = await res.json();
+  return result.data;
+};
+
+export const getTaskDetail = async (id) => {
+  const res = await fetch(`${BASE_URL}/detail/${id}`);
+  if (!res.ok) throw new Error("Failed to get task detail");
+  const result = await res.json();
+  return result.data?.logs;
 };

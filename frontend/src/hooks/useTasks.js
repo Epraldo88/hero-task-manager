@@ -3,6 +3,7 @@ import React from "react";
 import {
   createTask,
   deleteTask,
+  getTaskDetail,
   getTasks,
   updateTask,
 } from "services/task.service";
@@ -19,11 +20,17 @@ const useTasks = () => {
     queryFn: getTasks,
   });
 
+  const useTaskDetail = (id) =>
+    useQuery({
+      queryKey: ["task-detail", id],
+      queryFn: () => getTaskDetail(id),
+      enabled: !!id, // hanya jalan kalau id ada
+    });
+
   const createTaskMutation = useMutation({
     mutationFn: createTask,
     onSuccess: () => {
       queryClient.invalidateQueries(["tasks"]);
-      console.log("sukses create task mutation");
     },
   });
 
@@ -45,6 +52,7 @@ const useTasks = () => {
     tasks,
     isLoading,
     isError,
+    useTaskDetail,
     createTask: createTaskMutation.mutate,
     updateTask: updateTaskMutation.mutate,
     deleteTask: deleteTaskMutation.mutate,

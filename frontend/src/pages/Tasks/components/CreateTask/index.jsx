@@ -10,6 +10,7 @@ import dayjs from "dayjs";
 import useTasks from "hooks/useTasks";
 import React, { useState } from "react";
 import { useModalStore } from "store/modal.store";
+import { dateDisplay } from "utils/date";
 
 const baseFormData = {
   title: "",
@@ -95,11 +96,7 @@ const CreateTask = () => {
           <Label>Deadline</Label>
           <DateInput
             name={"deadline_date"}
-            value={
-              formData.deadline_date
-                ? dayjs(formData.deadline_date).format("YYYY-MM-DD")
-                : ""
-            }
+            value={dateDisplay(formData.deadline_date)}
             onChange={onChange}
           />
         </div>
