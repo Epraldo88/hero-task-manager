@@ -21,8 +21,8 @@ export const taskColumns = [
   },
   {
     header: "Due Date",
-    key: "end_date",
-    render: (value) => <p>{value ? dayjs(value).format("DD MM YYYY") : "-"}</p>,
+    key: "deadline_date",
+    render: (value) => <p>{value ? dayjs(value).format("DD-MM-YYYY") : "-"}</p>,
   },
   {
     header: "Performance",

@@ -14,9 +14,9 @@ export const createTask = async (req, res) => {
   const client = await pool.connect();
   try {
     await client.query("BEGIN");
-    const { title, description, assignee, status, deadline_date } = req.body;
+    const { title, description, assignee, deadline_date } = req.body;
 
-    const finalStatus = status || "Pending";
+    const status = "Pending";
     const taskResult = await client.query(
       `
         INSERT INTO tasks 
@@ -24,7 +24,7 @@ export const createTask = async (req, res) => {
         VALUES ($1, $2, $3, $4, $5)
         RETURNING *
       `,
-      [title, description, assignee, finalStatus, deadline_date]
+      [title, description, assignee, status, deadline_date]
     );
 
     const newTask = taskResult.rows[0];
@@ -32,10 +32,10 @@ export const createTask = async (req, res) => {
     await client.query(
       `
         INSERT INTO task_logs 
-        (task_id, action)
+        (task_id, status)
         VALUES ($1, $2)
       `,
-      [newTask.id, action]
+      [newTask.id, status]
     );
 
     await client.query("COMMIT");
