@@ -1,7 +1,7 @@
 import Label from "components/Form/Label";
 import React, { useState } from "react";
-import ButtonEditDetail from "../../Action/ButtonEditDetail";
 import TextDisplay from "components/TextDisplay";
+import ButtonEditDetail from "pages/Tasks/components/Action/ButtonEditDetail";
 
 const EditLayout = ({ label, value, children, required = false }) => {
   const [isEdit, setIsEdit] = useState(false);

@@ -2,10 +2,10 @@ import Table from "components/Table";
 import useTasks from "hooks/useTasks";
 import { taskColumns } from "./columns";
 import ButtonCreateTask from "./components/Action/ButtonCreateTask";
-import CreateTask from "./components/CreateTask";
+import CreateTask from "./components/FormModal/CreateTask";
 import DeleteConfirmationModal from "./components/DeleteConfirmationModal";
-import ViewTask from "./components/ViewTask";
 import Title from "components/Title";
+import ViewTask from "./components/FormModal/ViewTask";
 
 const Tasks = () => {
   const { tasks, isError, isLoading } = useTasks();
