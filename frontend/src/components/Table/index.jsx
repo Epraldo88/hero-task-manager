@@ -1,6 +1,23 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
+import Pagination from "./Pagination";
 
 const Table = ({ columns, datas }) => {
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+
+  const totalItems = datas.length;
+  const totalPages = Math.ceil(totalItems / limit);
+
+  const paginatedData = useMemo(() => {
+    const start = (page - 1) * limit;
+    const end = start + limit;
+    return datas.slice(start, end);
+  }, [datas, page, limit]);
+
+  const goToPage = (newPage) => {
+    if (newPage < 1 || newPage > totalPages) return;
+    setPage(newPage);
+  };
   return (
     <div className="w-full overflow-x-auto rounded-sm border border-gray-200 shadow-sm bg-white">
       <table className="min-w-full text-sm text-left text-gray-700">
@@ -17,7 +34,7 @@ const Table = ({ columns, datas }) => {
 
         {/* Table Body */}
         <tbody>
-          {datas.length === 0 ? (
+          {paginatedData.length === 0 ? (
             <tr>
               <td
                 colSpan={columns.length}
@@ -27,7 +44,7 @@ const Table = ({ columns, datas }) => {
               </td>
             </tr>
           ) : (
-            datas.map((data, idx) => (
+            paginatedData.map((data, idx) => (
               <tr
                 key={data.id || idx}
                 className={"border-t hover:bg-gray-50 transition"}
@@ -44,6 +61,9 @@ const Table = ({ columns, datas }) => {
           )}
         </tbody>
       </table>
+      <div className="p-4 flex justify-center">
+        <Pagination goToPage={goToPage} page={page} totalPages={totalPages} />
+      </div>
     </div>
   );
 };
