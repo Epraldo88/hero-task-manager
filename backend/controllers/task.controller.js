@@ -3,8 +3,22 @@ import { handleError, handleSuccess } from "../utils/responseHandler.js";
 
 export const getTask = async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM tasks ORDER BY id DESC");
-    handleSuccess(res, "All tasks fetched", result.rows);
+    const { status } = req.query;
+    let result = [];
+    if (status) {
+      const filtered = await pool.query(
+        `
+          SELECT * FROM tasks WHERE status = $1
+        `,
+        [status]
+      );
+      result = filtered.rows;
+    } else {
+      const allTasks = await pool.query("SELECT * FROM tasks ORDER BY id DESC");
+      result = allTasks.rows;
+    }
+    console.log({ result });
+    handleSuccess(res, "All tasks fetched", result);
   } catch (error) {
     handleError(res, error);
   }

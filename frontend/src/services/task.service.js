@@ -1,7 +1,9 @@
 const BASE_URL = "http://localhost:5000/api/tasks";
 
-export const getTasks = async () => {
-  const res = await fetch(BASE_URL);
+export const getTasks = async (status) => {
+  const url = status ? `${BASE_URL}?status=${status}` : BASE_URL;
+  console.log({ status });
+  const res = await fetch(url);
   if (!res.ok) throw new Error("Failed to fetch tasks");
   const result = await res.json();
   return result.data;

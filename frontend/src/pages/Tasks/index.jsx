@@ -6,9 +6,12 @@ import CreateTask from "./components/FormModal/CreateTask";
 import DeleteConfirmationModal from "./components/DeleteConfirmationModal";
 import Title from "components/Title";
 import ViewTask from "./components/FormModal/ViewTask";
+import TaskFilter from "./components/TaskFilter";
+import { useState } from "react";
 
 const Tasks = () => {
-  const { tasks, isError, isLoading } = useTasks();
+  const [filterStatus, setFilterStatus] = useState("");
+  const { tasks, isError, isLoading } = useTasks(filterStatus);
 
   if (isLoading) return;
   if (isError) return;
@@ -16,7 +19,11 @@ const Tasks = () => {
   return (
     <div>
       <Title>Task Management</Title>
-      <div className="mb-4">
+      <div className="flex justify-between mb-4">
+        <TaskFilter
+          onChange={(value) => setFilterStatus(value)}
+          value={filterStatus}
+        />
         <ButtonCreateTask />
       </div>
       <Table columns={taskColumns} datas={tasks} />

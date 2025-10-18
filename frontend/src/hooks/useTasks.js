@@ -8,7 +8,7 @@ import {
   updateTask,
 } from "services/task.service";
 
-const useTasks = () => {
+const useTasks = (status) => {
   const queryClient = useQueryClient();
 
   const {
@@ -16,8 +16,8 @@ const useTasks = () => {
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ["tasks"],
-    queryFn: getTasks,
+    queryKey: ["tasks", status],
+    queryFn: () => getTasks(status),
   });
 
   const useTaskDetail = (id) =>
