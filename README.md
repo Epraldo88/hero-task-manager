@@ -4,7 +4,7 @@ psql -U postgres -d task_manager -f backend/db/schema.sql
 # Backend
 cd backend
 
-<!-- add .env file -->
+Create a `.env` file inside the `backend/` folder:
 PG_USER=postgres
 PG_PASSWORD=admin
 PG_HOST=localhost
