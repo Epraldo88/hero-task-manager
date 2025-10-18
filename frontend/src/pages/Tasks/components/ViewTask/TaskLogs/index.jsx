@@ -1,4 +1,4 @@
-import { dateDisplay } from "utils/date";
+import { detailDateDisplay } from "utils/date";
 
 const TaskLogs = ({ datas }) => {
   const columns = [
@@ -48,7 +48,7 @@ const TaskLogs = ({ datas }) => {
                 className={"border-t hover:bg-gray-50 transition"}
               >
                 <Td>{data.status}</Td>
-                <Td>{dateDisplay(data.timestamp)}</Td>
+                <Td>{detailDateDisplay(data.timestamp)}</Td>
               </tr>
             ))
           )}

@@ -49,7 +49,9 @@ export const createTask = async (req, res) => {
 };
 
 export const updateTask = async (req, res) => {
+  const client = await pool.connect();
   try {
+    await client.query("BEGIN");
     const { id } = req.params;
     const { title, description, assignee, status, deadline_date } = req.body;
     const oldData = await pool.query(
@@ -62,24 +64,75 @@ export const updateTask = async (req, res) => {
     if (oldData.rows.length === 0) {
       return handleError(res, { message: "Task not found" });
     }
+
+    const newTitle = title || oldData.title;
+    const newDesc = description || oldData.description;
+    const newAssignee = assignee || oldData.assignee;
+    const newStatus = status || oldData.status;
+    const newDeadline = deadline_date || oldData.deadline_date;
+
+    let newStartDate = oldData.start_date;
+    let newEndDate = oldData.end_date;
+    let newPerformanceStatus = oldData.performance_status ?? "Not Evaluated";
+
+    if (newStatus === "On Progress" && !oldData.start_date) {
+      newStartDate = new Date();
+    }
+
+    if (newStatus === "Done") {
+      newEndDate = new Date();
+      const deadline = new Date(newDeadline);
+      newPerformanceStatus = newEndDate <= deadline ? "Ontime" : "Late";
+    }
+
+    if (oldData.status === "Done" && newStatus !== "Done") {
+      newEndDate = null;
+      newPerformanceStatus = "Not Evaluated";
+    }
+
     const updated = await pool.query(
       `
         UPDATE tasks
-        SET title = $1, description = $2, assignee = $3, status = $4, deadline_date = $5
-        WHERE id = $6
+        SET 
+        title = $1,
+        description = $2,
+        assignee = $3,
+        status = $4,
+        deadline_date = $5,
+        start_date = $6,
+        end_date = $7,
+        performance_status = $8
+        WHERE id = $9
         RETURNING *
       `,
       [
-        title || oldData.rows[0].title,
-        description || oldData.rows[0].description,
-        assignee || oldData.rows[0].assignee,
-        status || oldData.rows[0].status,
-        deadline_date || oldData.rows[0].deadline_date,
+        newTitle,
+        newDesc,
+        newAssignee,
+        newStatus,
+        newDeadline,
+        newStartDate,
+        newEndDate,
+        newPerformanceStatus,
         id,
       ]
     );
+
+    if (status) {
+      await client.query(
+        `
+          INSERT INTO task_logs
+          (task_id, status)
+          VALUES ($1, $2)
+        `,
+        [id, status]
+      );
+    }
+
+    await client.query("COMMIT");
     handleSuccess(res, "Task updated successfully", updated.rows[0]);
   } catch (error) {
+    await client.query("ROLLBACK");
     handleError(res, error);
   }
 };
@@ -112,13 +165,6 @@ export const deleteTask = async (req, res) => {
 export const getTaskDetail = async (req, res) => {
   try {
     const { id } = req.params;
-    const task = await pool.query(
-      `
-        SELECT * FROM tasks WHERE id = $1
-      `,
-      [id]
-    );
-
     const taskLog = await pool.query(
       `
         SELECT * FROM task_logs WHERE task_id = $1 ORDER BY id ASC
@@ -127,7 +173,6 @@ export const getTaskDetail = async (req, res) => {
     );
 
     const result = {
-      ...task.rows[0],
       logs: taskLog.rows,
     };
 

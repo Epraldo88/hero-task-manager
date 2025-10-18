@@ -11,10 +11,8 @@ const DeleteConfirmationModal = () => {
   const { selectedTask, setSelectedTask } = useTaskStore();
   const { deleteTask } = useTasks();
 
-  const buttonStyle = (type) => {
-    const color = type === "delete" ? "red" : "gray";
-    return `w-full flex items-center justify-center gap-x-2 bg-${color}-500 hover:bg-${color}-600 text-white`;
-  };
+  const baseButtonStyle =
+    "w-full flex items-center justify-center gap-x-2 text-white";
 
   const onClose = () => {
     setAction("");
@@ -36,10 +34,16 @@ const DeleteConfirmationModal = () => {
         </p>
       </div>
       <div className="flex gap-x-4 mt-8">
-        <Button className={buttonStyle("delete")} onClick={onDelete}>
+        <Button
+          className={`${baseButtonStyle} bg-red-500 hover:bg-red-600`}
+          onClick={onDelete}
+        >
           Delete <Trash2 size={18} />
         </Button>
-        <Button className={buttonStyle("cancel")} onClick={onClose}>
+        <Button
+          className={`${baseButtonStyle} bg-gray-500 hover:bg-gray-600`}
+          onClick={onClose}
+        >
           Cancel <X size={18} />
         </Button>
       </div>

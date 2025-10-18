@@ -6,3 +6,10 @@ export const dateDisplay = (value) => {
   }
   return "";
 };
+
+export const detailDateDisplay = (value) => {
+  if (value) {
+    return dayjs(value).format("YYYY-MM-DD HH:mm");
+  }
+  return "";
+};

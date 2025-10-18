@@ -5,6 +5,7 @@ import ButtonCreateTask from "./components/Action/ButtonCreateTask";
 import CreateTask from "./components/CreateTask";
 import DeleteConfirmationModal from "./components/DeleteConfirmationModal";
 import ViewTask from "./components/ViewTask";
+import Title from "components/Title";
 
 const Tasks = () => {
   const { tasks, isError, isLoading } = useTasks();
@@ -14,6 +15,7 @@ const Tasks = () => {
 
   return (
     <div>
+      <Title>Task Management</Title>
       <div className="mb-4">
         <ButtonCreateTask />
       </div>
