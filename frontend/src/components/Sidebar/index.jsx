@@ -25,7 +25,7 @@ const Sidebar = () => {
   return (
     <div>
       <div
-        className={`static z-20 top-0 left-0 h-screen w-64 bg-white shadow-md`}
+        className={`fixed z-20 top-0 left-0 h-screen w-64 bg-white shadow-md`}
       >
         {/* Brand */}
         <div className="flex items-center justify-center py-6 border-b">

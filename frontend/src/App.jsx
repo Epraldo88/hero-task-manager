@@ -12,7 +12,7 @@ function App() {
     <div className="flex flex-col md:flex-row min-h-screen">
       {!isLoginPage && <Sidebar />}
 
-      <div className={`${isLoginPage ? "" : "p-8 w-full"}`}>
+      <div className={`${isLoginPage ? "" : "ml-64 p-8 w-full"}`}>
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/tasks-management" element={<Tasks />} />
